@@ -1,0 +1,54 @@
+cells = 3
+board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+def paint_board():
+    print('-' * 4 * cells)
+    for i in range(cells):
+        print('|', board[0 + i * 3], '|', board[1 + i * 3], '|', board[2 + i * 3], '|')
+    print('-' * 4 * cells)
+
+def make_move(index, symbol):
+    if (index > 9 or index < 1 or board[index-1] in ('x', 'o')):
+        return False
+    board[index-1] = symbol
+    return True
+
+def check_result():
+    win = False
+    win_combination = (
+        (0,1,2), (3,4,5), (6,7,8), (0,3,6), (1,4,7), (2,5,8), (0,4,8), (2,4,6)
+    )
+    for a in win_combination:
+        if (board[a[0]] == board[a[1]] and board[a[1]] == board[a[2]]):
+            win = board[a[0]]
+
+
+    return win
+
+def start_game():
+    player = 'x'
+    step = 1
+    paint_board()
+
+    while (step < 10) and (check_result() == False):
+        index = input('Move player ' + player + '. Insert cell number (0 - exit):')
+        if (index == '0'):
+            break
+        if (make_move(int(index), player)):
+            print('Successfull move')
+
+            if (player == 'x'):
+                player = 'o'
+            else:
+                player = 'x'
+            paint_board()
+            step += 1
+        else:
+            print('Incorrect move!')
+    if (step == 10):
+        print('Draw')
+    else:
+        print('Winner player ' + check_result())
+
+print('Welcome to the game!')
+start_game()
